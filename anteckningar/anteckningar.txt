@@ -1,0 +1,34 @@
+Two small remaining risks I still recommend fixing later (optional):
+Guard search.known_for with (search.known_for || []) before .map.
+Only build poster/profile URL when path exists (use conditional).
+display.js: displayMovies(searchInput) awaits getSearchData and renders; createPersonCard correctly builds top3 list with safe fallback — looks good. Use a more specific input selector in app.js if desired.
+
+
+Hur animeringen för karusellen fungerar (visuellt flöde)
+Sekund 0:     [Kort 1] [Kort 2] [Kort 3] ...
+              ↑ position = 0
+
+Sekund 3:     [Kort 2] [Kort 3] [Kort 4] ...  (glider under 0.8s)
+              ↑ position = -270
+
+Sekund 6:     [Kort 3] [Kort 4] [Kort 5] ...
+              ↑ position = -540
+
+Sekund 9:     [Kort 4] [Kort 5] [Kort 6] ...
+              ↑ position = -810
+
+Sekund 12:    [Kort 1] [Kort 2] [Kort 3] ...  (reset, börjar om!)
+              ↑ position = 0 (loop)
+
+Error hantering:
+1. lists.js
+   └─ API misslyckas → throw new Error()
+
+2. display.js
+   └─ Fångar Error i catch
+   └─ Loggar error (console.error) för dev
+   └─ Visar vänligt meddelande (displayError) för user
+
+3. app.js
+   └─ Om display.js inte fångar → .catch() fångar det här
+   └─ Extra säkerhetsnät

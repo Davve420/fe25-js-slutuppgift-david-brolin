@@ -4,16 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet">
-    <script src="lists.js" type="module"></script>
-    <script src="config.js" type="module"></script>
-    <script src="display.js" type="module"></script>
-    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <script src="app.js" type="module"></script>
+    <title>Movie Finder</title>
 </head>
 <body>
+<header>
+    <div id="headerTitle">Now Playing in Cinemas</div>
+    <button id="homeBtn" aria-label="Home">🏠
+        
+    </button>
+</header>
+    <!-- ===== DEFAULT VIEW (Karusell + Listor) ===== -->
+    <div id="defaultView">
 
-    <div id="container">
+        <!-- NOW PLAYING KARUSELL -->
+        <section id="carouselSection">
+            <div id="carousel" class="carousel-container">
+                <!-- Kort renderas här automatiskt från JS -->
+            </div>
+        </section>
 
+        <!-- GLOBALT SÖKFÄLT (överallt synligt) -->
+        <form id="searchForm">
+            <input type="search" placeholder="Search for a movie or a person" id="search">
+            <button type="submit">Search</button>
+        </form>
+        <!-- KNAPPAR FÖR LISTOR -->
+        <div id="listButtons">
+            <button id="popularBtn">Popular Movies</button>
+            <button id="ratedBtn">Top Rated Movies</button>
+        </div>
+
+        <!-- LISTOR (renderas beroende på knapp-val) -->
+        <section id="listSection">
+            <div id="listTitle"></div>
+            <div id="listContainer" class="movies-list">
+                <!-- Kort renderas här -->
+            </div>
+        </section>
     </div>
-    
+
+    <!-- ===== SEARCH VIEW (bara sökresultat) ===== -->
+    <div id="searchView" style="display: none;">
+        <div id="container">
+            <!-- Kort renderas här -->
+        </div>
+    </div>
+
+    <div id="error" style="display: none;"></div>
+
 </body>
 </html>
