@@ -3,4 +3,6 @@ Movie Finder är ett projekt som använder sig av The movie Database API för at
 Om du skulle vilja fortsätta bygga eller använda dig av på projektet går det att klona projektet via github eller kopiera ner koden i samma filstruktur. Viktigt att notera är att API:n kommer inte att fungera utan din egna API nyckel. Du måste först navigera till filen config.js och byta ut options objektet till din personliga Bearer-key.
 Du hittar hjälp och instruktioner här https://developer.themoviedb.org/docs/getting-started . Via samma länk hittar du även instruktioner om hur API:et fungerar. 
 
+Dokumentation för bibliotek: https://animejs.com/documentation/
+
 Made and maintained by Davve420 
