@@ -1,5 +1,5 @@
-import {options} from "./config.js"
-//try catch för API status koder !respone.ok (kolla objektets innehåll)
+import {options} from "./API-key.js"
+
 export async function getMovieLists(selectedValue){
     try{
 
@@ -16,7 +16,7 @@ export async function getMovieLists(selectedValue){
         title: movie.original_title,
         poster_path: "https://image.tmdb.org/t/p/w500" + movie.poster_path,
         release_date: movie.release_date
-    })).toSpliced(10,19);
+    })).toSpliced(10,19); // To display only the first ten
     console.log(chosenData);
     return chosenData;
 }
@@ -24,7 +24,7 @@ catch(error){
     throw error;
 }
 }
-// try catch status kod
+
 export async function getSearchData(searchInput){
     try{
     const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(searchInput)}&include_adult=false&language=en-US&page=1`, options)
@@ -36,7 +36,6 @@ export async function getSearchData(searchInput){
     const searchData = await searchRes.json();
     console.log(searchData);
     
-    //Building a new list with the displayed properties for movies based on the search    
     const movies = searchData.results
     .filter(movie => movie.media_type === 'movie' )
     .map( search =>{

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet">
+    <link href="./CSS/style.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
-    <script src="app.js" type="module"></script>
+    <script src="./js/app.js" type="module"></script>
     <title>Movie Finder</title>
 </head>
 <body>
@@ -15,17 +15,16 @@
         
     </button>
 </header>
-    <!-- ===== DEFAULT VIEW (Karusell + Listor) ===== -->
+    <!-- DEFAULT VIEW (Karusell + Listor) -->
     <div id="defaultView">
 
-        <!-- NOW PLAYING KARUSELL -->
         <section id="carouselSection">
             <div id="carousel" class="carousel-container">
                 <!-- Kort renderas här automatiskt från JS -->
             </div>
         </section>
 
-        <!-- GLOBALT SÖKFÄLT (överallt synligt) -->
+        <!-- GLOBALT SÖKFÄLT -->
         <form id="searchForm">
             <input type="search" placeholder="Search for a movie or a person" id="search">
             <button type="submit">Search</button>
@@ -36,19 +35,17 @@
             <button id="ratedBtn">Top Rated Movies</button>
         </div>
 
-        <!-- LISTOR (renderas beroende på knapp-val) -->
+        <!-- LISTOR -->
         <section id="listSection">
             <div id="listTitle"></div>
             <div id="listContainer" class="movies-list">
-                <!-- Kort renderas här -->
             </div>
         </section>
     </div>
 
-    <!-- ===== SEARCH VIEW (bara sökresultat) ===== -->
+    <!-- SEARCH VIEW (bara sökresultat) -->
     <div id="searchView" style="display: none;">
         <div id="container">
-            <!-- Kort renderas här -->
         </div>
     </div>
 

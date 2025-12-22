@@ -1,6 +1,5 @@
-import {getMovieLists, getSearchData}  from "./lists.js";
+import {getMovieLists, getSearchData}  from "./get-API-data.js";
 
-// Karusell — ALLTID Now Playing
 export async function displayNowPlayingCarousel(){
     try {
         const chosenData = await getMovieLists('now_playing');
@@ -12,14 +11,15 @@ export async function displayNowPlayingCarousel(){
     }
 }
 
+
 function renderCarousel(movies){
     const carousel = document.getElementById('carousel');
     carousel.innerHTML = '';
     
-    // Lagra antal UNIKA filmer
+    // Store number of UNIQUE movies
     carousel.dataset.totalMovies = movies.length;
     
-    // Duplicera filmerna 2x för infinite loop-effekt
+    // Duplicate movies 2x for infinite loop effect
     // [film0, film1, ... film9, film0, film1, ... film9]
     const doubledMovies = [...movies, ...movies];
     
@@ -35,47 +35,48 @@ function startCarousel(){
     
     if (cards.length < 1) return;
     
-    // Få kort-bredd och gap INNAN vi startar
+    // Get card width and gap before carousel starts
     const getCardWidth = () => {
         return cards[0].offsetWidth;
     };
     
     const cardWidth = getCardWidth();
-    const gap = 40;
+    const gap = 40; // Space between cards matching CSS --card-gap variable
     
-    // LOOP BOUNDARIES - Bara loop mellan dessa index!
-    const startLoopIndex = 3;                 // Index 3 (startar på film 3)
-    const endLoopIndex = totalMovies + 2;    // Index 12 (när totalMovies = 10)
+    // LOOP BOUNDARIES - Only loop between these indices!
+    const startLoopIndex = 3;                 // Index 4 (starts at film 4)
+    const endLoopIndex = totalMovies + 2;    // Index 12 (when totalMovies = 10)
     
     // START INDEX
     let currentIndex = startLoopIndex;
     cards[currentIndex].classList.add('center');
     
     // INITIAL POSITION
+    // Center current card by offsetting 2 card widths to the left
     const initialOffset = -currentIndex * (cardWidth + gap) + 2 * (cardWidth + gap);
     carousel.style.transform = `translateX(${initialOffset}px)`;
     
     setInterval(() => {
         cards[currentIndex].classList.remove('center');
         
-        // Nästa index - MEN BARA INOM BOUNDARIES!
+        // Next index - BUT ONLY WITHIN BOUNDARIES!
         currentIndex++;
         if (currentIndex > endLoopIndex) {
-            currentIndex = startLoopIndex;  // Loopa tillbaka
+            currentIndex = startLoopIndex;  // Loop back
         }
         
         cards[currentIndex].classList.add('center');
         
         const offset = -currentIndex * (cardWidth + gap) + 2 * (cardWidth + gap);
         
-        // Om vi loopade tillbaka, animera från gamla position först
+        // If we looped back, reset position without animation
         if (currentIndex === startLoopIndex) {
-            // Reset position UTAN animation
+            // Reset position without animation after anime.js duration completes (800ms)
             setTimeout(() => {
                 carousel.style.transform = `translateX(${offset}px)`;
             }, 800);
         } else {
-            // Annars animera smooth
+            // Otherwise animate smoothly, ref: https://animejs.com/documentation/
             anime({
                 targets: carousel,
                 translateX: offset,
@@ -83,11 +84,9 @@ function startCarousel(){
                 easing: 'easeInOutQuad'
             });
         }
-    }, 3000);
+    }, 3000); // Slide to next card every 3 seconds
 }
 
-
-// Listor — Popular eller Top Rated (ENDAST via knappar)
 export async function displayMovieLists(selectedValue){
     try {
         const chosenData = await getMovieLists(selectedValue);
@@ -108,14 +107,12 @@ function renderMovieLists(movies){
 }
 
 
-export async function displaySearch(searchInput){
+export async function performSearch(searchInput){
     try{
-        showSearchView(); // visa search-vy
+        showSearchView(); 
         document.getElementById('headerTitle').textContent = `${searchInput}`;
-        console.log('displaySearch called with', searchInput);
         const { movies, persons } = await getSearchData(searchInput);
         
-        // Kolla om sökresultatet är tomt
         if (movies.length === 0 && persons.length === 0) {
             displayNoResults(searchInput);
             return;
@@ -143,7 +140,7 @@ function renderSearchResults(movies, persons){
     const container = document.getElementById('container');
     container.innerHTML = '';
     persons.forEach(p => container.appendChild(createPersonCard(p)));
-    movies.forEach(m => container.appendChild(createMovieCard(m))); // (default showOverview = true)
+    movies.forEach(m => container.appendChild(createMovieCard(m))); 
 }
 
 function displayNoResults(searchTerm){
@@ -163,6 +160,9 @@ function createMovieCard(movie, showOverview = true){
     const card = document.createElement(`div`);
     card.className = `movieCard`;
     
+    const type = document.createElement('h3');
+    type.textContent = 'Movie';
+
     const img = document.createElement('img');
     img.src = movie.poster_path || './images/default-poster.svg';
     img.alt = movie.title || `poster`;
@@ -176,11 +176,10 @@ function createMovieCard(movie, showOverview = true){
     const overview = document.createElement('p');
     overview.textContent = movie.overview;
 
-    // If there is no overview or no overview wanted, none will be displayed.
     if (showOverview && movie.overview) {
         const overview = document.createElement('p');
         overview.textContent = movie.overview;
-        card.append(img, title, date, overview);
+        card.append(type, img, title, date, overview);
     } else {
         card.append(img, title, date);
     }
@@ -192,6 +191,9 @@ function createMovieCard(movie, showOverview = true){
 function createPersonCard(person){
     const card = document.createElement(`div`);
     card.className = `personcard`
+
+    const type = document.createElement('h3');
+    type.textContent = 'Person';
 
     const img = document.createElement('img');
     img.src = person.profile_path || './images/default-avatar.svg'; //Using a default Avatar if there is none provided by the API, from (https://heroicons.com/)
@@ -210,7 +212,7 @@ function createPersonCard(person){
         top3.appendChild(li);
     });
 
-    card.append(img, name, department, top3);
+    card.append(type, img, name, department, top3);
     return card;
 }
 
@@ -219,11 +221,8 @@ export function displayError(errorMessage){
     h1Error.innerText = errorMessage;
     h1Error.style.display = 'block';
     
-    // Dölj error efter 5 sekunder
+    // Hide error after 5 seconds so it doesn't show after reload
     setTimeout(() => {
         h1Error.style.display = 'none';
-    }, 5000);
+    }, 5000); 
 }
-
-
-// gör en ny fil som renderar och bygger upp sidan.
